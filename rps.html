@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Game</title>
+</head>
+<body>
+<h1>Rock Paper Scissors</h1>
+<div class="score-board">
+    <div class="badge" id="user-label">User</div>
+    <div class="badge" id="computer-label">Bot</div>
+    <span id="user-score">0</span>:<span id="computer-score">0</span>
+</div>
+<div class="result"></div>
+<div class="choices">
+    <div class="choice" id="rock"> ✊ </div>
+    <div class="choice" id="paper"> 🖐 </div>
+    <div class="choice" id="scissors"> ✌️ </div>
+</div>
+
+<div class="limit">
+    <label> Set your Limit
+        <input type="number" class="input">
+        <button onclick="setLimit()">Ok</button>
+    </label>
+</div>
+
+<button class="restart-button" onclick="restart()"> Restart </button>
+</body>
+<link rel="stylesheet" href="styles/rps.css">
+<script type="application/javascript" src="scripts/rps.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Asap&display=swap" rel="stylesheet">
+</html>

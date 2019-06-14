@@ -13,15 +13,9 @@ let generateGrid = () => {
   }
   createStartValues();
   drawGrid();
-
   redrawBlocks();
-
   document.addEventListener('keydown', function ( event ) {
-    if (isGameOver()) {
-      console.log("GameOver");
-    } else {
-      move(event);
-    }
+    move(event);
   });
 };
 
@@ -40,6 +34,17 @@ let drawGrid = () => {
     }
     element.appendChild(div);
   }
+};
+
+let isFull = () => {
+  for (let i = 0; i < 4; i++) {
+    for (let j = 0; j < 4; j++) {
+      if (blocks[ i ][ j ] === 0) {
+        return false;
+      }
+    }
+  }
+  return true;
 };
 
 let getRandomBlocks = () => {
@@ -86,25 +91,30 @@ let move = ( e ) => {
   switch (e.key) {
     case 'ArrowDown':
       shift(blocks[ 0 ].length - 1, -1, -1, 0);
-      spawn();
-      redrawBlocks();
       break;
     case 'ArrowUp':
       shift(0, blocks[ 0 ].length, 1, 0);
-      spawn();
-      redrawBlocks();
       break;
     case 'ArrowLeft':
       shift(0, blocks[ 0 ].length, 1, 1);
-      spawn();
-      redrawBlocks();
       break;
     case 'ArrowRight':
       shift(blocks[ 0 ].length - 1, -1, -1, 1);
-      spawn();
-      redrawBlocks();
+      break;
+    default:
+      return;
   }
-
+  redrawBlocks();
+  if (!isFull()) {
+    spawn();
+  } else {
+    console.log(isBoardPlayable());
+    if (isBoardPlayable()) {
+      if (!document.querySelector('.overlay')) {
+        gameOverAnimation();
+      }
+    }
+  }
 };
 
 let shift = ( start, end, inc, direction ) => {
@@ -139,18 +149,18 @@ let shift = ( start, end, inc, direction ) => {
   }
 };
 
-let merge = (  iif,  ijf,  iis,  ijs,  inc) => {
-  if (iis >= 0 && iis < blocks.length && ijs >= 0 && ijs < blocks[0].length) {
-    if (blocks[iif][ijf] === blocks[iis][ijs]) {
-      blocks[iis][ijs] *= 2;
-      blocks[iif][ijf] = 0;
-    } else if (blocks[iis][ijs] === 0) {
-      blocks[iis][ijs] = blocks[iif][ijf];
-      blocks[iif][ijf] = 0;
+let merge = ( iif, ijf, iis, ijs, inc ) => {
+  if (iis >= 0 && iis < blocks.length && ijs >= 0 && ijs < blocks[ 0 ].length) {
+    if (blocks[ iif ][ ijf ] === blocks[ iis ][ ijs ]) {
+      blocks[ iis ][ ijs ] *= 2;
+      blocks[ iif ][ ijf ] = 0;
+    } else if (blocks[ iis ][ ijs ] === 0) {
+      blocks[ iis ][ ijs ] = blocks[ iif ][ ijf ];
+      blocks[ iif ][ ijf ] = 0;
       if (iif === iis) {
-        merge(iis, ijs, iis, ijs-inc, inc);
+        merge(iis, ijs, iis, ijs - inc, inc);
       } else if (ijf === ijs) {
-        merge(iis, ijs, iis-inc, ijs, inc);
+        merge(iis, ijs, iis - inc, ijs, inc);
       }
     }
   }
@@ -168,41 +178,44 @@ let spawn = () => {
 
 let generateColor = ( value ) => {
   let b = value % 255;
-  if(value > 126) {
-    return "#" + convertToHex(255 / (value % 255)) + convertToHex(b % 255 * 0.2) + convertToHex(b * 10 % 255);
-  } else {
-    return "#" + convertToHex(255 / (value % 255)) + convertToHex(b % 255) + convertToHex(b * 10 % 255);
-  }
-
+  return "#" + convertToHex(255 / b) + convertToHex(b % 255) + convertToHex(b * 10 % 255);
 };
 
-let isGameOver = () => {
+let isBoardPlayable = () => {
   for (let x = 0; x < blocks[ 0 ].length; x++) {
     for (let y = 0; y < blocks[ x ].length; y++) {
-      if (blocks[ x ][ y ] === 0) {
+      if (blocks[ x ][ y ] !== 0) {
         let v = blocks[ x ][ y ];
         if (x > 0 && blocks[ x - 1 ][ y ] !== 0 && v === blocks[ x - 1 ][ y ]) {
-          return true;
+          return false;
         }
-
         if (y > 0 && blocks[ x ][ y - 1 ] !== 0 && v === blocks[ x ][ y - 1 ]) {
-          return true;
+          return false;
         }
-
         if (x < 4 - 1 && blocks[ x + 1 ][ y ] !== 0 && v === blocks[ x + 1 ][ y ]) {
-          return true;
+          return false;
         }
-
         if (y < 4 - 1 && blocks[ x ][ y + 1 ] !== 0 && v === blocks[ x ][ y + 1 ]) {
-          return true;
+          return false;
         }
       }
     }
   }
-  return false;
+  return true;
 };
 
 let convertToHex = ( colorVal ) => {
   let hex = parseInt(colorVal).toString(16);
   return hex.length === 1 ? '0' + hex : hex;
+};
+
+let gameOverAnimation = () => {
+  let root = document.querySelector('.grid');
+  let overlay = document.createElement('div');
+  let overlayLabel = document.createElement('label');
+  overlayLabel.innerHTML = 'Game Over';
+  root.classList.add('blur');
+  overlay.className = 'overlay';
+  overlay.appendChild(overlayLabel);
+  document.body.appendChild(overlay);
 };
