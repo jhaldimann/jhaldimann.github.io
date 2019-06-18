@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Drawboard</title>
+</head>
+<body>
+<div class="menuinput">
+    <label>
+        Size
+        <input type="text" value="2" class="size">
+    </label>
+    <label>
+        Color
+        <input type="color" id="body" class="colorpicker" value="#000000">
+    </label>
+    <label>
+        <a>
+            <button onclick="save()"> Save</button>
+        </a>
+    </label>
+    <label>
+        <button onclick="changeMode('rectangle')">Rectangle</button>
+    </label>
+    <label>
+        <button onclick="changeMode('draw')">Draw</button>
+    </label>
+    <label>
+        <button onclick="changeMode('circle')">Circle</button>
+    </label>
+</div>
+<canvas></canvas>
+</body>
+<script type="application/javascript" src="../scripts/drawboard.js"></script>
+<link rel="stylesheet" href="../styles/drawboard.css">
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+</html>
