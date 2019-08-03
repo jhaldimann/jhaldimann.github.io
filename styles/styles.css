@@ -2,6 +2,10 @@
 	font-family: 'Open Sans', sans-serif;
 }
 
+h1 {
+	text-align: center;
+}
+
 a {
 	text-decoration: none;
 	color: #000;
@@ -14,11 +18,11 @@ a:visited {
 .row {
 	margin: 0 auto;
 	display: table;
-	width: 60%; /*Optional*/
-	table-layout: fixed; /*Optional*/
-	border-spacing: 10px; /*Optional*/
-	
+	width: 60%;
+	table-layout: fixed;
+	border-spacing: 10px;
 }
+
 .col {
 	display: table-cell;
 	text-align: center;
@@ -30,5 +34,41 @@ a:visited {
 }
 
 .col p {
-	font-size: 2vh;
+	font-size: 2vw;
+}
+
+@media screen and (max-width: 992px) {
+	 h1 {
+		 font-size: 5vw;
+	 }
+	
+	.row {
+		display: grid;
+	}
+	
+	.col {
+		margin-top: 30px;
+	}
+	
+	.col p {
+		font-size: 5vw;
+	}
+}
+
+@media screen and (max-width: 600px) {
+	h1 {
+		font-size: 5vw;
+	}
+	
+	.row {
+		display: grid;
+	}
+	
+	.col {
+		margin-top: 30px;
+	}
+	
+	.col p {
+		font-size: 5vw;
+	}
 }
